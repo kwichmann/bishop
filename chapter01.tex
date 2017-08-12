@@ -1,0 +1,230 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\numberwithin{equation}{section}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\graphicspath{ {img/} }
+\DeclareGraphicsExtensions{.png, .jpg}
+
+\title{Chapter 1 - Introduction}
+\author{Kristian Wichmann}
+
+\begin{document}
+\maketitle
+
+\section{Exercise 1.1}
+Suppose we are given a training set, of $N$ observation points:
+\begin{equation}
+\mathbf{x}=(x_1,\cdots,x_n)^t,\quad \mathbf{t}=(t_1,\cdots,t_n)^t
+\end{equation}
+We think of the $t$'s as being dependent on the $x$'es: $t=t(x)$. We wish to devise a model through polynomial curve fitting of order $M$. I.e. our model is of the form:
+\begin{equation}
+y(x,\mathbf{w})=w_0+w_1 x+w_2 x^2+\cdots+w_M x^M=\sum_{j=0}^M w_j x^j
+\end{equation} 
+Here the parameters $\mathbf{w}=(w_0,\cdots,w_M)^t$ are known as the weights. We wish to find the model which minimizes the following error function:
+\begin{equation}
+E(\mathbf{w})=\frac{1}{2}\sum_{n=1}^N\left[y(x_n,\mathbf{w})-t_n)\right]^2
+\end{equation}
+
+\subsection{Solution}
+To minimize the error function, we differentiate with respect to the $i$'th weight, using the chain rule:
+\begin{equation}
+\label{error_deriv}
+\frac{\partial E}{\partial w_i}=\frac{1}{2}\sum_{n=1}^N\frac{\partial}{\partial w_i}\left[y(x_n,\mathbf{w})-t_n)\right]^2=\sum_{n=1}^N\left[y(x_n,\mathbf{w})-t_n)\right]\frac{\partial y(x_n,\mathbf{w})}{\partial w_i}
+\end{equation}
+The last derivative is:
+\begin{equation}
+\frac{\partial y(x_n,\mathbf{w})}{\partial w_i}=\frac{\partial}{\partial w_i}\sum_{j=0}^M w_j x_n^j=\sum_{j=0}^M \delta_{ij}x_n^j=x_n^i
+\end{equation}
+Now equation \ref{error_deriv} becomes:
+\begin{equation}
+\frac{\partial E}{\partial w_i}=\sum_{n=1}^N\left[\sum_{j=0}^M w_j x_n^j-t_n\right]x_n^i=\sum_{n=1}^N\left[\sum_{j=0}^M w_j x_n^{i+j}-t_n x_n^i\right]
+\end{equation}
+Now define:
+\begin{equation}
+A_{ij}=\sum_{n=1}^N x_n^{i+j}\quad T_i=\sum_{n=1}^N t_n x_n^i
+\end{equation}
+Then we can rewrite:
+\begin{equation}
+\label{deriv_rewritten}
+\frac{\partial E}{\partial w_i}=\sum_{j=0}^M A_{ij}w_j-T_i
+\end{equation}
+Setting this derivative equal to zero, we get:
+\begin{equation}
+\sum_{j=0}^M A_{ij}w_j=T_i
+\end{equation}
+
+\section{Exercise 1.2}
+Consider the same problem as last exercise, but with an additional regularization term added to the error function:
+\begin{equation}
+\tilde{E}(\mathbf{w})=\frac{1}{2}\sum_{n=1}^N\left[y(x_n,\mathbf{w})-t_n)\right]^2+\frac{\lambda}{2}||\mathbf{w}||^2
+\end{equation}
+We wish to find the equations the weights must satisfy in this case.
+
+\subsection{Solution}
+The derivative of the error function is modified:
+\begin{equation}
+\frac{\partial\tilde{E}}{\partial w_i}=\frac{\partial E}{\partial w_i}+\frac{\partial}{\partial w_i}\left[\frac{\lambda}{2}||\mathbf{w}||^2\right]
+\end{equation}
+The last correction term is:
+\begin{equation}
+\frac{\lambda}{2}\frac{\partial}{\partial w_i}(w_0^2+w_1^2+\cdots+w_M^2)=\lambda w_i
+\end{equation}
+According to equation \ref{deriv_rewritten} we have:
+\begin{equation}
+\frac{\partial\tilde{E}}{\partial w_i}=\sum_{j=0}^M A_{ij}w_j-T_i+w_i
+\end{equation}
+Setting this equal to zero we get:
+\begin{equation}
+\sum_{j=0}^M A_{ij}w_j+\lambda w_i=T_i
+\end{equation}
+We may absorb the $\lambda$ term into the $A$ matrix by the following modification:
+\begin{equation}
+\tilde{A}_{ij}=A_{ij}+\lambda\delta_{ij}
+\end{equation}
+Then we get:
+\begin{equation}
+\sum_{j=0}^M\tilde{A}_{ij}w_j=T_i
+\end{equation}
+
+\section{Exercise 1.3}
+
+\begin{table}
+\centering
+\caption{Content of the boxes (Exercise 1.3)}
+\label{table:boxes}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+\multicolumn{1}{c|}{}         & \multicolumn{1}{c|}{r} & b & g \\ \hline
+\multicolumn{1}{|l|}{Apples}  & 3                      & 1 & 3 \\ \hline
+\multicolumn{1}{|l|}{Oranges} & 4                      & 1 & 3 \\ \hline
+\multicolumn{1}{|l|}{Limes}   & 3                      & 0 & 4 \\ \hline
+\end{tabular}
+\end{table}
+
+We have three colored boxes, $r$ (red), $b$ (blue), and $g$ (green). The contents of the three boxes are shown in table \ref{table:boxes}. A box is chosen at random according to the following probability distribution:
+\begin{equation}
+p(r)=\frac{1}{5},\quad p(b)=\frac{1}{5},\quad p(g)=\frac{3}{5}
+\end{equation}
+Next, a random piece of fruit (equal chance for each piece) is chosen from the box.
+
+\begin{enumerate}
+\item What is the probability of the fruit being an apple?
+\item Given that the selected fruit is an orange, what is that probability that the green box was picked?
+\end{enumerate}
+
+\subsection{Solution 1}
+The probability of getting an apple (A) is:
+\begin{equation}
+p(A)=p(A|r)p(r)+p(A|b)p(b)+p(A|g)p(g)
+\end{equation}
+Inserting:
+\begin{equation}
+p(A)=\frac{3}{10}\cdot\frac{1}{5}+\frac{1}{2}\cdot\frac{1}{5}+\frac{3}{10}\cdot\frac{3}{5}=\frac{3}{50}+\frac{1}{10}+\frac{9}{50}=\frac{3+5+9}{50}=\frac{17}{50}=34\%
+\end{equation}
+
+\subsection{Solution 2}
+We wish to find $p(g|O)$, where 'O' is short for orange. For this we need Bayes' rule:
+\begin{equation}
+p(g|O)=\frac{p(O|g)p(g)}{p(O)}
+\end{equation}
+The denominator can be found similarly to problem 1:
+\begin{equation}
+p(O)=p(O|r)p(r)+p(O|b)p(b)+p(O|g)p(g)
+\end{equation}
+Inserting:
+\begin{equation}
+p(O)=\frac{4}{10}\cdot\frac{1}{5}+\frac{1}{2}\cdot\frac{1}{5}+\frac{3}{10}\cdot\frac{3}{5}=\frac{4+5+9}{50}=\frac{18}{50}=36\%
+\end{equation}
+Now we have:
+\begin{equation}
+p(g|O)=\frac{3/10\cdot 3/5}{18/50}=\frac{9\cdot 50}{50\cdot 18}=\frac{9}{18}=\frac{1}{2}
+\end{equation}
+
+\section{Exercise 1.4}
+Let $p_x(x)$ be a probability density function for a continuous variable $x$. Consider a variable transformation $x=g(y)$. The pdf for the transformed variable is then:
+\begin{equation}
+p_y(y)=p_x(x)\left|\frac{dx}{dy}\right|=p_x(g(y))|g'(y)|
+\end{equation} 
+Show that in general, a non-linear transformation will change the location of a maximum of the pdf, while a linear one will not.
+
+\subsection{Solution}
+If $p_x$ has a maximum at $x=\hat{x}$ then we must have:
+\begin{equation}
+\frac{d p_x(\hat{x})}{dx}=0
+\end{equation}
+Now, consider the derivative of $p_y$:
+\begin{equation}
+\frac{d p_y(y)}{dy}=\frac{d p_x}{dx}\frac{dg}{dy}|g'(y)|+p_x(g(y))\textrm{sgn}(g'(y))g''(y)
+\end{equation}
+If $y=g(\hat{x})$, the first term is zero, but the second need not be. Therefore, the location of a maximum will generally move. However, for a linear transformation the second derivative is zero, and so the second term becomes zero as well.
+
+\section{Exercise 1.5}
+The variance of a continuous random variable $f(x)$ is defined as:
+\begin{equation}
+\textrm{var}[f(x)]=\mathbb{E}[(f(x)-\mathbb{E}[f(x)])^2]
+\end{equation}
+Show that this may be written:
+\begin{equation}
+\textrm{var}[f(x)]=\mathbb{E}[f(x)^2]-\mathbb{E}[f(x)]^2
+\end{equation}
+
+\subsection{Solution}
+Expand the square inside the expectation value:
+\begin{equation}
+(f(x)-\mathbb{E}[f(x)])^2=f(x)^2+\mathbb{E}[f(x)]^2-2f(x)\mathbb{E}[f(x)]
+\end{equation}
+The expectation values is:
+\begin{equation}
+\mathbb{E}[f(x)^2]+\mathbb{E}[f(x)]^2-2\mathbb{E}[f(x)]\cdot\mathbb{E}[f(x)]=\mathbb{E}[f(x)^2]-\mathbb{E}[f(x)]^2
+\end{equation}
+
+\section{Exercise 1.6}
+Show that two independent random variable $x$ and $y$ have zero covariance.
+
+\subsection{Solution}
+The covariance can be written:
+\begin{equation}
+\int\int(x-\mathbb{E}[x])(y-\mathbb{E}[y])p(x,y)dx\ dy
+\end{equation}
+Here $p(x,y)$ is the joint distribution function of $x$ and $y$. But since these are independent $p(x,y)=p(x)p(y)$. So this integral splits into two parts:
+\begin{equation}
+\int\int(x-\mathbb{E}[x])(y-\mathbb{E}[y])p(x)p(y)dx\ dy=\int(x-\mathbb{E}[x])dx\cdot\int(y-\mathbb{E}[y])dy
+\end{equation}
+Each of these factors is zero, and therefore so is the covariance.
+
+\section{Exercise 1.7}
+Show that:
+\begin{equation}
+I=\int_{-\infty}^\infty\exp\left(-\frac{1}{2\sigma^2}x^2\right)dx=\sqrt{2\pi\sigma^2}
+\end{equation}
+
+\subsection{Solution}
+Consider the square of $I$:
+\begin{equation}
+I^2=\int_{-\infty}^\infty\exp\left(-\frac{1}{2\sigma^2}x^2\right)dx\cdot\int_{-\infty}^\infty\exp\left(-\frac{1}{2\sigma^2}y^2\right)dy
+\end{equation}
+Rearrange the order:
+\begin{align}
+I^2=&\int_{-\infty}^\infty\int_{-\infty}^\infty\exp\left(-\frac{1}{2\sigma^2}x^2\right)\exp\left(-\frac{1}{2\sigma^2}y^2\right)dx\ dy=\\
+&\int_{-\infty}^\infty\int_{-\infty}^\infty\exp\left(-\frac{1}{2\sigma^2}(x^2+y^2)\right)dx\ dy
+\end{align}
+The may be regarded as an integral over the plane. We may now shift to polar coordinates, noting that $x^2+y^2=r^2$ and $dx\ dy=r\ dr\ d\theta$:
+\begin{equation}
+I^2=\int_0^{2\pi}\int_0^\infty\exp\left(-\frac{r^2}{2\sigma^2}\right)r\ dr\ d\theta=2\pi\int_0^\infty\exp\left(-\frac{r^2}{2\sigma^2}\right)r\ dr
+\end{equation}
+For the $r$-integral, substitute $u=r^2$. Then $du/dr=2r$, and so $dr=\frac{1}{2r}du$:
+\begin{equation}
+\int_0^\infty\exp\left(-\frac{r^2}{2\sigma^2}\right)r\ dr=\int_0^\infty\exp\left(-\frac{u}{2\sigma^2}\right)r\frac{1}{2r}du=\frac{1}{2}\int_0^\infty\exp\left(-\frac{u}{2\sigma^2}\right)du
+\end{equation}
+This is elemental to integrate:
+\begin{equation}
+\frac{1}{2}\left[-2\sigma^2\exp\left(-\frac{u}{2\sigma^2}\right)\right]_0^\infty=\sigma^2
+\end{equation}
+Hence $I^2=2\pi\sigma^2$, and therefore $I=\sqrt{2\pi\sigma^2}$.
+\end{document}
