@@ -227,4 +227,66 @@ This is elemental to integrate:
 \frac{1}{2}\left[-2\sigma^2\exp\left(-\frac{u}{2\sigma^2}\right)\right]_0^\infty=\sigma^2
 \end{equation}
 Hence $I^2=2\pi\sigma^2$, and therefore $I=\sqrt{2\pi\sigma^2}$.
+
+\section{Exercise 1.8}
+The univariate Gaussian distribution with mean $\mu$ and variance $\sigma^2$ has the pdf:
+\begin{equation}
+\mathcal{N}(x|\mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\end{equation}
+\begin{enumerate}
+\item Show that the expectation value is actually $\mu$.
+\item Show that $\mathbb{E}[x^2]=\mu^2+\sigma^2$.
+\item Show that the variance is actually $\sigma^2$.
+\end{enumerate}
+
+\subsection{Solution 1}
+We need to evaluate the integral:
+\begin{equation}
+\mathbb{E}[x]=\int_{-\infty}^\infty\mathcal{N}(x|\mu,\sigma^2)x\ dx=\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)x\ dx
+\end{equation}
+Now apply the substitution $u=x-\mu$. This means $du=dx$. Also $x=u+\mu$:
+\begin{equation}
+\mathbb{E}[x]=\frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^\infty\exp\left(-\frac{u^2}{2\sigma^2}\right)(u+\mu)du
+\end{equation}
+We may split the integral into two:
+\begin{equation}
+\int_{-\infty}^\infty\exp\left(-\frac{u^2}{2\sigma^2}\right)u\ du+\mu\int_{-\infty}^\infty\exp\left(-\frac{u^2}{2\sigma^2}\right)du
+\end{equation}
+The first is an uneven function, and so the integral is zero. The second is equal to $\mu\sqrt{2\pi\sigma^2}$ according to the last exercise. So all in all we get:
+\begin{equation}
+\mathbb{E}[x]=\mu
+\end{equation} 
+
+\subsection{Solution 2}
+The normalization condition is:
+\begin{equation}
+\int_{-\infty}^\infty\mathcal{N}(x|\mu,\sigma^2)\ dx=1
+\end{equation}
+Now differentiate on both sides of the equation with respect to $\sigma^2$. The right side is obvious zero, while the left side is:
+\begin{align}
+\int_{-\infty}^\infty\frac{\partial}{\partial(\sigma^2)}\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)dx&=\\
+\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi}}\frac{-1}{2(\sigma^2)^{3/2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)dx&+\\
+\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\frac{-(x-\mu)^2}{2}\frac{-1}{(\sigma^2)^2}dx&=\\
+-\frac{1}{\sigma^2}\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)dx&+\\
+\frac{1}{\sigma^4}\int_{-\infty}^\infty\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)(x-\mu)^2\ dx&
+\end{align}
+The first integral is simply 1, while the second can be split further into three by expanding the square:
+\begin{equation}
+(x-\mu)^2=x^2+\mu^2-2x\mu
+\end{equation}
+The $x^2$-integral is what we're trying to calculate. The $mu^2$-integral is a constant times 1 again. And finally the mixed term can be found from part 1. All in all:
+\begin{align}
+-\frac{1}{\sigma^2}+\frac{1}{\sigma^4}\left[\mathbb{E}[x^2]+\mu^2-2\mu\cdot\mu\right]&=0\Leftrightarrow\\
+-1+\frac{1}{\sigma^2}\left[\mathbb{E}[x^2]-\mu^2\right]&=0\Leftrightarrow\\
+\frac{1}{\sigma^2}\left[\mathbb{E}[x^2]-\mu^2\right]&=1\Leftrightarrow\\
+\mathbb{E}[x^2]-\mu^2&=\sigma^2\Leftrightarrow\\
+\mathbb{E}[x^2]&=\mu^2+\sigma^2
+\end{align}
+
+\subsection{Solution 3}
+We can now find the variance by applying the formula from the exercise above, and using the previous solutions:
+\begin{equation}
+\textrm{var}[x]=\mathbb{E}[x^2]-\mathbb{E}[x]^2=\mu^2+\sigma^2-\mu^2=\sigma^2
+\end{equation}
+
 \end{document}
