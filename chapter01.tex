@@ -289,4 +289,89 @@ We can now find the variance by applying the formula from the exercise above, an
 \textrm{var}[x]=\mathbb{E}[x^2]-\mathbb{E}[x]^2=\mu^2+\sigma^2-\mu^2=\sigma^2
 \end{equation}
 
+\section{Exercise 1.9}
+Show that the mode of the univariate Gaussian distribution $\mathcal{N}(x|\mu,\sigma^2)$ has mode $\mu$. Similarly, show the that multivariate Gaussian $\mathcal{N}(\mathbf{x}|\mathbf{\mu},\mathbf{\Sigma})$ has mode $\mathbf{\mu}$.
+
+\subsection{Solution}
+The mode is where the pdf is maximal. Differentiate with respect to $x$:
+\begin{equation}
+\frac{\partial}{\partial x}\mathcal{N}(x|\mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\frac{\partial}{\partial x}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\end{equation}
+Using the chain rule this is equal to:
+\begin{equation}
+\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\left(-\frac{2}{2\sigma^2}(x-\mu)\right)
+\end{equation}
+This may only be equal to zero if $x-\mu=0\Leftrightarrow x=\mu$.
+
+For the multivariate Gaussian in $D$ dimensions, the pdf is:
+\begin{equation}
+\mathcal{N}(\mathbf{x}|\mathbf{\mu},\mathbf{\Sigma})=\frac{1}{(2\pi)^{D/2}}\frac{1}{|\mathbf{\Sigma}|}\exp\left\{-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu})\right\}
+\end{equation}
+Again, the normalization constant doesn't matter, and since the exponential is monotonically increasing, this comes down to minimizing the quadratic form. Written in coordinate form, this is:
+\begin{equation}
+-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D(\mathbf{x}-\mathbf{\mu})_i\mathbf{\Sigma}^{-1}_{ij}(\mathbf{x}-\mathbf{\mu})_j=-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D(x_i-\mu_i)\mathbf{\Sigma}^{-1}_{ij}(x_j-\mu_j)
+\end{equation}
+Now differentiate with respect to $x_k$:
+\begin{align}
+\frac{\partial}{\partial x_k}\left[-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D(x_i-\mu_i)\mathbf{\Sigma}^{-1}_{ij}(x_j-\mu_j)\right]&=\\
+-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D\frac{\partial}{\partial x_k}(x_i-\mu_i)\mathbf{\Sigma}^{-1}_{ij}(x_j-\mu_j)&+\\
+-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D(x_i-\mu_i)\mathbf{\Sigma}^{-1}_{ij}\frac{\partial}{\partial x_k}(x_j-\mu_j)&=\\
+-\frac{1}{2}\sum_{i=1}^D\sum_{j=1}^D\left[\delta_{ik}\mathbf{\Sigma}^{-1}_{ij}(x_j-\mu_j)+(x_i-\mu_i)\mathbf{\Sigma}^{-1}_{ij}\delta_{jk}\right]
+\end{align}
+Cancelling the deltas and renaming the first summation this is:
+\begin{equation}
+-\frac{1}{2}\sum_{i=1}^D\left[\mathbf{\Sigma}^{-1}_{ki}(x_i-\mu_i)+\mathbf{\Sigma}^{-1}_{ik}(x_i-\mu_i)\right]
+\end{equation}
+Since the covariance matrix is symmetric, so is the inverse, and we get:
+\begin{equation}
+-\sum_{i=1}^D\mathbf{\Sigma}^{-1}_{ki}(x_i-\mu_i)
+\end{equation}
+Back in matrix form this should be zero:
+\begin{equation}
+-\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu})=0
+\end{equation}
+Now multiply both sides by $\mathbf{\Sigma}$ to get that $\mathbf{x}-\mathbf{\mu}=0\Leftrightarrow\mathbf{x}=\mathbf{\mu}$.
+
+\section{Exercise 1.10}
+Assuming the random variables $x$ and $z$ to independent, show that:
+\begin{enumerate}
+\item $\mathbb{E}[x+z]=\mathbb{E}[x]+\mathbb{E}[z]$
+\item $\textrm{var}[x+z]=\textrm{var}[x]+\textrm{var}[z]$
+\end{enumerate}
+
+\subsection{Solution 1}
+Assuming the variables to be continuous, we have:
+\begin{equation}
+\mathbb{E}[x+z]=\int\int f(x,z)(x+z)dx\ dz
+\end{equation}
+But since the variables are independent this is:
+\begin{align}
+\mathbb{E}[x+z]=&\int\int f(x)f(z)(x+z)dx\ dz=\\
+&\int\int f(x)f(z)x\ dx\ dz+\int\int f(x)f(z)z\ dx\ dz=\\
+&\int f(z)\int f(x)x\ dx\ dz+\int f(x)\int f(z)z\ dz\ dx=\\
+&\int f(z)\mathbb{E}[x]dz+\int f(x)\mathbb{E}[z]dx=\\
+&\mathbb{E}[x]\int f(z)dz+\mathbb{E}[z]\int f(x)dx=\mathbb{E}[x]+\mathbb{E}[z]
+\end{align}
+Similarly for discrete variables, where the integrals are replaced by sums.
+
+\subsection{Solution 2}
+Using this result, the variance is:
+\begin{equation}
+\textrm{var}[x+z]=\mathbb{E}[(x+z)^2]-\mathbb{E}[x+z]^2=\mathbb{E}[x^2]+\mathbb{E}[z^2]+2\mathbb{E}[xz]-\mathbb{E}[x+z]^2
+\end{equation}
+But we also know that:
+\begin{equation}
+\mathbb{E}[x+z]^2=(\mathbb{E}[x]+\mathbb{E}[z])^2=\mathbb{E}[x]^2+\mathbb{E}[z]^2+2\mathbb{E}[x]\mathbb{E}[z]
+\end{equation}
+So:
+\begin{equation}
+\textrm{var}[x+z]=\textrm{var}[x]+\textrm{var}[z]+2(\mathbb{E}[xz]-\mathbb{E}[x]\mathbb{E}[z])
+\end{equation}
+So if we can show $\mathbb{E}[xz]=\mathbb{E}[x]\mathbb{E}[z]$ we're done:
+\begin{align}
+\mathbb{E}[xz]=\int\int f(x,z)xz\ dx\ dz&=\\
+\int\int f(x)f(z)xz\ dx\ dz&=
+\int f(x)x\ dx\int f(z)z\ dz=\mathbb{E}[x]\mathbb{E}[z]
+\end{align}
+
 \end{document}
