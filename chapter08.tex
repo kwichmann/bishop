@@ -1,0 +1,62 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\numberwithin{equation}{section}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\graphicspath{ {img/} }
+\DeclareGraphicsExtensions{.png}
+
+\title{Chapter 8 - Graphical models}
+\author{Kristian Wichmann}
+
+\begin{document}
+\maketitle
+
+\section{Exercise 8.1}
+The parent node factorization for a Bayesian network is:
+\begin{equation}
+p(\mathbf{x})=\prod_i p(x_i|\textrm{pa}_i)
+\label{parent_node_factorization}
+\end{equation}
+Show that if each of the conditional distributions are normalized, then so is the joint distribution.
+
+\subsection{Solution}
+The assumption is, that for any combination of values of $\textrm{pa}_i$, we have:
+\begin{equation}
+\int p(x_i|\textrm{pa}_i)\ d\mu_i(x_i)=1
+\label{normalization_assumption}
+\end{equation}
+Here $\mu_i$ is the relevant dominating measure for the probability density function for $x_i$.
+
+We wish to calculate:
+\begin{equation}
+\int p(\mathbf{x})\ d\mu_1(x_1)\cdots d\mu_K(x_K)
+\end{equation}
+Using equation \ref{parent_node_factorization} this can be written:
+\begin{equation}
+\int p(x_K|\textrm{pa}_K)\cdots p(x_1|\textrm{pa}_1) d\mu_1(x_1)\cdots d\mu_K(x_K)
+\end{equation}
+Now using the assumption from equation \ref{normalization_assumption} for $i=1$, the inner innermost integration turns to one. Doing so for $i=2$ and so on up to $i=K$, we get that the entire integral is equal to 1 as desired.
+
+\section{Exercise 8.2}
+Show that the property of there being no directed cycles in a directed graphs follows from the statement that there exists an ordering of the nodes, such that there are no links to a lower-numbered node.
+
+\subsection{Solution}
+Let $x_1, x_2,\dots, x_K$ be such an ordering. Assume that a directed cycle exists
+\begin{equation}
+x_{i_1}\rightarrow x_{i_2}\rightarrow\cdots\rightarrow x_{i_N}=x_{i_1}
+\end{equation}
+By the ordering assumption we must have:
+\begin{equation}
+i_1<i_2<\cdots<i_n
+\end{equation}
+But since $i_1=i_n$ we have $i_1<i_1$, which is a contradiction.
+
+\end{document}
