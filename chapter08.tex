@@ -151,6 +151,25 @@ p(a=1,b=1|c=1)=\frac{p(a=1,b=1,c=1}{p(c=1)}=\frac{0.096}{0.52}=& \frac{12}{65}\a
 
 Now we can check if $p(a|c)p(b|c)=p(a,b|c)$. See table \ref{table:e_83_conditional}. Now the tables in each row contains the same probabilities, as desired.
 
+\begin{figure}
+\centering
+\tikz{ %
+        \node[latent] (a) {$a$} ; %
+        \node[latent, left=of a, yshift=0.8cm] (b) {$b$} ; %
+        \node[latent, left=of a, yshift=-0.8cm] (c) {$c$} ; %
+        \edge {c} {a} ; \edge {c} {b} ; %
+      }
+\caption{The graphical model for exercise 8.3}
+\label{graph:e8_3}
+\end{figure}
+
+Now, using this and the multiplication rule of probability we can write:
+\begin{equation}
+p(a,b,c)=p(a,b|c)p(c)=p(a|c)p(b|c)p(c)
+\label{e8_4_cfactor}
+\end{equation}
+The graph corresponding to this factorization is shown in figure \ref{graph:e8_3}.
+
 \section{Exercise 8.4}
 Show that
 \begin{equation}
@@ -161,14 +180,11 @@ and draw the corresponding directed graph.
 
 \subsection{Solution}
 The only factor on the right hand side of equation \ref{e8_4} that we haven't yet calculated is $p(c|a)$. This can be found by Bayes' rule:
+
 \begin{equation}
 p(c|a)=\frac{p(a|c)p(c)}{p(a)}
 \end{equation}
-Now, according to the multiplication rule of probability:
-\begin{equation}
-p(a,b,c)=p(a,b|c)p(c)=p(a|c)p(b|c)p(c)
-\label{e8_4_cfactor}
-\end{equation}
+
 Here, we've used the result from exercise 8.3.
 Now, let's evaluate the right hans side of equation \ref{e8_4}:
 \begin{equation}
@@ -184,7 +200,7 @@ Accordin to equation \ref{e8_4_cfactor}, we have the desired result.
         \node[latent, left=of a, yshift=-0.8cm] (c) {$c$} ; %
         \edge {a} {c} ; \edge {c} {b} ; %
       }
-\caption{The graph for exercise 8.4}
+\caption{The graphical model for exercise 8.4}
 \label{graph:e8_4}
 \end{figure}
 
